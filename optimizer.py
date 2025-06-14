@@ -1,5 +1,8 @@
 # optimizer.py
 def optimize_order(items, delivery_location="default"):
+    if not isinstance(items, dict):
+        raise ValueError("O campo 'items' deve ser um dicionário.")
+
     total = 0
     detalhes = []
 
@@ -15,6 +18,8 @@ def optimize_order(items, delivery_location="default"):
     }
 
     for tipo, qtd in items.items():
+        if not isinstance(qtd, (int, float)):
+            continue  # ignora entradas inválidas
         preco_unit = precos.get(tipo, 0)
         subtotal = preco_unit * qtd
         total += subtotal
@@ -25,7 +30,7 @@ def optimize_order(items, delivery_location="default"):
             "subtotal": round(subtotal, 2)
         })
 
-    if delivery_location.lower() == "montijo":
+    if isinstance(delivery_location, str) and delivery_location.lower() == "montijo":
         total += 5
 
     return {
